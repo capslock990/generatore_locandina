@@ -1,15 +1,13 @@
  <?php
-/*
-//Controlla i campi del form e li assegna a variabili
-if (!isset($_POST["formLocandina"])){
-    echo "Modulo non compilato correttamente!";
-    } else {
-            $nome = $_POST["nome"];
-            $cognome = $_POST["conome"];
-            $titolo = $_POST["seminario"];
-        }; //chiudere il ciclo alla fine 
 
-*/
+//Controlla se tutti i campi del form sono stati compilati e li assegna a variabili
+$array_controllo = array('nome', 'cognome', 'seminario', 'data', 'orario_inizio', 'orario_fine', 'descrizione');
+if (!array_diff($array_controllo, array_keys($_POST))){
+
+	echo "Modulo non compilato correttamente!<br \>";
+	echo "<a href=inserimento_dati.html>Torna al modulo</a>";
+
+	} else {
 
 $nome = $_POST["nome"];
 $cognome = $_POST["cognome"];
@@ -20,13 +18,13 @@ $orario_fine = $_POST["orario_fine"];
 $descrizione = $_POST["descrizione"];
 
 
-// Include the main TCPDF library (search for installation path).
+// Include la libreria TCPDF (search for installation path).
 require_once('./tcpdf/tcpdf.php');
 
-// Extend the TCPDF class to create custom Header and Footer
+// Estende la classe TCPDF per creare un Header e un Footer personalizzati
 class MYPDF extends TCPDF {
 
-	//Page header
+	//Header
 	public function Header() {
 		// Logo SX
 		$logo_UdA = K_PATH_IMAGES.'logo_UdA.jpg';
@@ -45,12 +43,12 @@ class MYPDF extends TCPDF {
 		
 	}
 
-	// Page footer
+	// Footer
 	public function Footer() {
 		
-		// Position at 15 mm from bottom
+		// Posizione a 15 mm dal fondo pagina
 		$this->SetY(-15);
-		// Set font
+		// Imposta il font
 		$this->SetFont('helvetica', 'I', 6);
 		// Imposta il colore di sfondo della cella
 		$this->SetFillColor(173, 216, 230);
@@ -59,10 +57,10 @@ class MYPDF extends TCPDF {
 	}
 }
 
-// create new PDF document
+// Crea il documento PDF
 $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
-// set document information
+// Imposta le informazioni del documento
 $pdf->SetCreator('UniCH');
 $pdf->SetAuthor("$nome $cognome");
 $pdf->SetTitle("$titolo");
@@ -72,7 +70,7 @@ $pdf->SetKeywords('UdA, UniCH, Seminario, Università Chieti-Pescara');
 // set default monospaced font
 $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
-// set margins
+// Imposta i margini
 $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
 $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
@@ -83,7 +81,7 @@ $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 // set image scale factor
 $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
-// set some language-dependent strings (optional)
+// Imposta la lingua delle stringhe specifiche (optional)
 if (@file_exists(dirname(__FILE__).'/lang/ita.php')) {
     require_once(dirname(__FILE__).'/lang/ita.php');
     $pdf->setLanguageArray($l);
@@ -94,10 +92,7 @@ if (@file_exists(dirname(__FILE__).'/lang/ita.php')) {
 // set default font subsetting mode
 $pdf->setFontSubsetting(true);
 
-// Set font
-// dejavusans is a UTF-8 Unicode font, if you only need to
-// print standard ASCII chars, you can use core fonts like
-// helvetica or times to reduce file size.
+// Imposta il font
 $pdf->SetFont('dejavusans', '', 14, '', true);
 
 // Add a page
@@ -122,23 +117,26 @@ $pdf->Cell(0, 0, "Il seminario si terrà il giorno: $data dalle $orario_inizio a
 $html = <<<EOD
 EOD;*/
 
-// Stampa il contenuto di $descrizione utilizzando la function writeHTMLCell()
+// Stampa il contenuto di $descrizione utilizzando "function writeHTMLCell()"
 $pdf->SetFont('helvetica', '', 15);
 $pdf->writeHTMLCell(0, 0, '', '65', $descrizione, 0, 1, 0, true, '', true);
 
 // ---------------------------------------------------------
 
-// Close and output PDF document
+// Chiude e genera il documento
 // This method has several options, check the source code documentation for more information.
 ob_end_clean();
 $pdf->Output('locandina.pdf', 'I');
 
+}
+
 //============================================================+
-// END OF FILE
+// FINE FILE
 //============================================================+
 
 //============================================================+
 //
-// Realizzato con TCPDF: https://tcpdf.org/ di Nicola Asuni
+// Realizzato da Luigigiuseppe Prosperi con la 
+// libreria TCPDF: https://tcpdf.org/ di Nicola Asuni
 // 
 //============================================================+
