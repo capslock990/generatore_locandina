@@ -9,4 +9,4 @@ di un sistema che permette ai professori di generare in automatico le copertine 
 
 Per la creazione del file è stata utilizzata la librearia PHP TCPDF (https://tcpdf.org/ - https://github.com/tecnickcom/tc-lib-pdf).
 
-La realizzazione è ancora in corso, pertanto i file subiranno modifiche fine all'ultimazione.
+La realizzazione è ancora in corso, pertanto i file subiranno modifiche fino all'ultimazione.
