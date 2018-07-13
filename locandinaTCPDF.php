@@ -1,21 +1,4 @@
  <?php
-//============================================================+
-// File name   : example_001.php
-// Begin       : 2008-03-04
-// Last Update : 2013-05-14
-//
-// Description : Example 001 for TCPDF class
-//               Default Header and Footer
-//
-// Author: Nicola Asuni
-//
-// (c) Copyright:
-//               Nicola Asuni
-//               Tecnick.com LTD
-//               www.tecnick.com
-//               info@tecnick.com
-//============================================================+
-
 /*
 //Controlla i campi del form e li assegna a variabili
 if (!isset($_POST["formLocandina"])){
@@ -34,6 +17,8 @@ $titolo = $_POST["seminario"];
 $data = $_POST["data"];
 $orario_inizio = $_POST["orario_inizio"];
 $orario_fine = $_POST["orario_fine"];
+$descrizione = $_POST["descrizione"];
+
 
 // Include the main TCPDF library (search for installation path).
 require_once('./tcpdf/tcpdf.php');
@@ -56,7 +41,7 @@ class MYPDF extends TCPDF {
 		$this->Cell(105, 7, 'Scuola delle Scienze Economiche, Aziendali, Giuridiche e Sociologiche - Dipartimento di Economia', 0, 0, 'C', true, '', 2, false, 'C', 'C');
 		// Logo DX
 		$logo_DEC = K_PATH_IMAGES.'logo_DEC.jpg';
-		$this->Image($logo_DEC, 10, 10, 0, 18, 'JPG', '', 'N', false, 300, 'R', false, false, 0, false, false, false);
+		$this->Image($logo_DEC, 10, 10, 0, 12, 'JPG', '', 'N', false, 300, 'R', false, false, 0, false, false, false);
 		
 	}
 
@@ -124,26 +109,22 @@ $pdf->AddPage();
 
 //Stampa titolo seminario
 $pdf->Ln(18);
-$pdf->SetFont('helvetica', 'B', 12);
+$pdf->SetFont('helvetica', 'B', 20);
 $pdf->Cell(0, 0, "Seminario: $titolo", 0, 0, 'C', false, '', 0, false, 'C', 'C');
 
 //Stampa giorno e orario
 $pdf->Ln(8);
-$pdf->SetFont('helvetica', '', 10);
-$pdf->Cell(0, 0, "Il seminario si terrà il giono: $data dalle $orario_inizio alle $orario_fine", 0, 0, 'C', false, '', 0, false, 'C', 'C');
+$pdf->SetFont('helvetica', '', 15);
+$pdf->Cell(0, 0, "Il seminario si terrà il giorno: $data dalle $orario_inizio alle $orario_fine", 0, 0, 'C', false, '', 0, false, 'C', 'C');
 
 // Set some content to print
-$pdf->SetFont('times', '', 12);
+/*$pdf->SetFont('times', '', 12);
 $html = <<<EOD
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nec dui sit amet diam imperdiet luctus. Proin quis velit sit amet orci tincidunt faucibus nec ut magna. Duis venenatis cursus orci. Ut posuere magna id bibendum porttitor. Vestibulum fermentum nunc ultrices dui porttitor lacinia. Vestibulum eleifend nisl massa, non mollis justo elementum vitae. Fusce feugiat eros ante, eu dictum lectus pellentesque nec. Duis finibus in tortor eu vehicula.
-Praesent lectus nibh, mollis quis quam vitae, commodo blandit erat. Sed quis venenatis ligula, quis vehicula tortor. Quisque sit amet cursus justo, a pellentesque quam. Mauris sed facilisis metus, et fringilla ante. Nulla non erat id ipsum imperdiet mattis eu id est. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Quisque non sem ac sapien euismod fringilla nec ac erat.
-Morbi lobortis pharetra purus. Mauris consectetur ut justo sed sagittis. In sit amet ipsum vel ipsum pharetra pulvinar. Nulla vel placerat risus. Curabitur ut eros et mi convallis vulputate sit amet at nunc. Duis cursus facilisis sem, vitae condimentum arcu lacinia quis. Nulla a augue ut elit hendrerit aliquam nec eu tortor. Aenean ac pharetra ante, vel euismod est. In quis ligula turpis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed eu malesuada tellus. Etiam venenatis tempor nulla non finibus. Morbi non eros sollicitudin, finibus felis at, luctus nisi. 
+EOD;*/
 
-EOD;
-
-// Print text using writeHTMLCell()
-
-$pdf->writeHTMLCell(0, 0, '', '65', $html, 0, 1, 0, true, '', true);
+// Stampa il contenuto di $descrizione utilizzando la function writeHTMLCell()
+$pdf->SetFont('helvetica', '', 15);
+$pdf->writeHTMLCell(0, 0, '', '65', $descrizione, 0, 1, 0, true, '', true);
 
 // ---------------------------------------------------------
 
@@ -154,4 +135,10 @@ $pdf->Output('locandina.pdf', 'I');
 
 //============================================================+
 // END OF FILE
+//============================================================+
+
+//============================================================+
+//
+// Realizzato con TCPDF: https://tcpdf.org/ di Nicola Asuni
+// 
 //============================================================+
