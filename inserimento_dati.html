@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="it">
+<head><title>Genera Locandina</title></head>
+<body>
+    <h1>Pagina per la generazione automatica delle locandine dei seminari</h1>
+    <p>
+        <form action="locandinaTCPDF.php" method="POST" name="formLocandina">
+                Nome:<br>
+                <input type="text" name="nome"><br>
+                Cognome:<br>
+                <input type="text" name="cognome"><br>
+                Titolo Seminario:<br>
+                <input type="text" name="seminario"><br>
+                Data:<br>
+                <input type="date" name="data"><br>
+                Orario Inizio:<br>
+                <input type="time" name="orario_inizio"><br>
+                Orario Fine:<br>
+                <input type="time" name="orario_fine"><br>
+                Descrizione seminario:<br>
+                <textarea rows="4" cols="50" name="descrizione">Inserire descrizione...</textarea><br>
+
+                <input type="submit" value="Genera Locandina">
+    
+        </form> 
+    </p> 
+</body>
+</html>
