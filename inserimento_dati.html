@@ -1,79 +1,120 @@
-<!doctype html>
+<?php
+
+header("Content-Type: text/html; charset=ISO-8859-1");
+$matricola = $_SESSION['matricola'];
+$idSeminario = $_SESSION['idSeminario'];
+include ('recupera_locandina.php');
+
+?>
+
+<!DOCTYPE html>
 <html lang="it">
 <head><title>Genera Locandina</title></head>
+
+<style>
+body {margin: 35px;}
+div.avviso {color: red; font-weight: bold;}
+div.lineaSingola {float:left;}
+</style>
+
 <body>
     <h1>Pagina per la generazione automatica delle locandine dei seminari</h1>
-    <p>
 
-        <script type="text/javascript" src="nicEdit.js"></script> 
-        <script type="text/javascript">bkLib.onDomLoaded(nicEditors.allTextAreas);</script>
+	<?php
+	if (!empty(recuperaLocandina($idSeminario))) {
+		echo '<p>
+		<div class="avviso" id="avvisoLocandina">ATTENZIONE! Locandina già presente nel database.</div><br>
+		Cliccare qui per scaricarla: <a href="http://localhost/uploads/'.recuperaLocandina($idSeminario).'" download>Locandina</a>.<br><br>
+		</p>';
+	}
+	?>
 
-        <script type="text/javascript">
-        function validateForm() {
-            
-            var nome = document.forms["formLocandina"]["nome"].value;
-            var cognome = document.forms["formLocandina"]["cognome"].value;
-            var seminario = document.forms["formLocandina"]["seminario"].value;
-            var data = document.forms["formLocandina"]["data"].value;
-            var orario_inizio = document.forms["formLocandina"]["orario_inizio"].value;
-            var orario_fine = document.forms["formLocandina"]["orario_fine"].value;
-            var descrizione = document.forms["formLocandina"]["descrizione"].value;
+	<p>
+		<strong>Caricamento della locandina:</strong><br><br>
+		Dopo aver generato la locandina, o se ne siete già in possesso, caricarla dal proprio PC utilizzando il tasto Sfoglia... e poi cliccando su Carica.<br>
+		Procedendo con il caricamento, la locandina già salvata verrà sostituita. Assicurarsi di aver salvato il file di cui si ha bisogno.<br>
+		<form enctype="multipart/form-data" method="POST" name="locandina_caricata" action="inserisci_locandina.php">
+		Carica locandina: <input type="file" name="locandina_personale" multiple>
+		<input type="hidden" name="matricola" value="<?php echo "$matricola"; ?>">
+		<input type="hidden" name="idSeminario" value="<?php echo "$idSeminario"; ?>">
+		<input type="submit" value="Carica">
+		</form><br>
 
-            if (nome == ""){
-                document.getElementById("nome").innerHTML = "Inserisci nome";  
-                return false;
-            };
+	</p>
+	
+	<p>
 
-            if (cognome == ""){
-                document.getElementById("cognome").innerHTML = "Inserisci cognome";  
-                return false;
-            };
+		<strong>Modulo per l'inserimento dei dati:</strong><br><br>
+	
+		I campi indicati con (Opzionale) posso essere lasciati vuoti.
 
-            if (seminario == ""){
-                document.getElementById("seminario").innerHTML = "Inserisci titolo seminario";  
-                return false;
-            };
+		<script type="text/javascript" src="validaForm.js"></script>
+        <form enctype="multipart/form-data" action="locandina_TCPDF.php" method="POST" name="formLocandina" onsubmit="return validaForm();">
 
-            if (data == ""){
-                document.getElementById("data").innerHTML = "Inserisci data";  
-                return false;
-            };
+        <div class="lineaSingola"> 
+		Nome:<div class="avviso" id="nome"></div>
+		<input type="text" name="nome">&emsp;
+		</div>
 
-            if (orario_inizio == ""){
-                document.getElementById("orario_inizio").innerHTML = "Inserisci l'orario dell'inizio";  
-                return false;
-            };
+        Cognome:<div class="avviso" id="cognome"></div>
+        <input type="text" name="cognome"><br><br>
+		
 
-            if (orario_fine == ""){
-                document.getElementById("orario_fine").innerHTML = "Inserisci l'orario della fine";  
-                return false;
-            };
+		Titolo Seminario:<div class="avviso" id="seminario"></div>
+		<input type="text" name="seminario" size="80"><br>
 
-            if (descrizione == ""){
-                document.getElementById("descrizione").innerHTML = "Inserisci la descrizione";  
-                return false;
-            };
+		Sottotitolo Seminario (Opzionale):<br>
+		<input type="text" name="sottotitolo" size="80"><br><br>
 
-        }
-        </script>
+		Numero CFU (Opzionale):
+		<input type="number" name="cfu" min="0" step = "0.5"><br><br>
 
-        <form enctype="multipart/form-data" action="locandinaTCPDF.php" method="POST" name="formLocandina" onsubmit="return validateForm();">
+		Data:<div class="avviso" id="data"></div>
+		<input type="date" name="data"><br><br>
 
-                Nome:<div id="nome" style="color:red;"></div>
-                <input type="text" name="nome"><br>
-                Cognome:<div id="cognome" style="color:red;"></div>
-                <input type="text" name="cognome"><br>
-                Titolo Seminario:<div id="seminario" style="color:red;"></div>
-                <input type="text" name="seminario"><br>
-                Data:<div id="data" style="color:red;"></div>
-                <input type="date" name="data"><br>
-                Orario Inizio:<div id="orario_inizio" style="color:red;"></div>
-                <input type="time" name="orario_inizio"><br>
-                Orario Fine:<div id="orario_fine" style="color:red;"></div>
-                <input type="time" name="orario_fine"><br>
-                Descrizione seminario:<div id="descrizione" style="color:red;"></div>
-                <textarea rows="5" cols="80" name="descrizione">Inserire descrizione...</textarea><br>
-                <input type="submit" value="Genera Locandina">
+		<div class="lineaSingola"> 
+		Orario Inizio:&emsp;<div class="avviso" id="orario_inizio"></div>
+		<input type="time" name="orario_inizio">
+		</div>
+
+		Orario Fine (Opzionale):<br>
+		<input type="time" name="orario_fine"><br><br>
+		
+		Luogo:<div class="avviso" id="luogo"></div>
+		<input type="radio" name="luogo" value="sede_pescara" checked>Pescara - Viale Pindaro, 42<br>
+		<input type="radio" name="luogo" value="sede_chieti">Chieti - Via dei Vestini, 31<br>
+		<input type="radio" name="luogo" value="sede_aurum">Aurum - Largo Gardone Riviera<br>
+		<input type="radio" name="luogo" value="sede_pers">Personalizzato:
+		<input type="text" name="luogo_pers_valore"><br>
+		
+		Aula (Opzionale):<div id="aula"></div>
+		<input type="text" name="aula"><br><br>
+
+		<div class="lineaSingola">
+		Corso di Laurea (Opzionale):<br>
+		Triennale:<br>
+		<input type="checkbox" name="cdl[0]" value="clea">Economia Aziendale<br>
+		<input type="checkbox" name="cdl[1]" value="clec">Economia e Commercio<br>
+		<input type="checkbox" name="cdl[2]" value="cleii">Economia e Informatica per l'Impresa<br>
+		</div><br>
+
+		Magistrale:<br>
+		<input type="checkbox" name="cdlm[0]" value="cleam">Economia Aziendale Magistrale<br>
+		<input type="checkbox" name="cdlm[1]" value="clecm">Economia e Commercio Magistrale<br>
+		<input type="checkbox" name="cdlm[2]" value="cleba">Economia e Business Analitics<br><br>
+
+		Sfondo locandina (Opzionale):<br>
+		<input type="radio" name="sfondo" value="default" checked>Predefinito<br>
+		<input type="radio" name="sfondo" value="personalizzato">Personalizzato (selezionare dal proprio PC):<br> 
+		Formati consentiti: jpg, png, gif - Dimensione massima 1MB<br>
+		<input type="file" name="sfondoupload"><br><br>
+				
+		Descrizione seminario (Massimo 46 righe):<div class="avviso" id="descrizione"></div>
+		<textarea rows="5" cols="100" name="descrizione">Inserire descrizione...</textarea><br>
+				
+		<input type="hidden" name="idSeminario" value="<?php echo "$idSeminario";?>">
+
+		<input type="submit" value="Genera Locandina">
     
         </form> 
     </p> 
