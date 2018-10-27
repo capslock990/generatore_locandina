@@ -105,6 +105,7 @@ class MYPDF extends TCPDF {
         // Seleziona l'immagine da inserire come sfondo (predefinita o personalizzata)
 		if($_POST['sfondo'] == 'personalizzato'){
 		$sfondoPersImg = 'C:/xampp/htdocs/uploads/'.$_FILES['sfondoupload']['name'];
+		$this->SetAlpha(0.2);
         $this->Image($sfondoPersImg, 0, 0, 210, 297, '', '', '', true, 300, '', false, false, 0);
 		} else {
         $sfondoDefault = K_PATH_IMAGES.'sfondodefault.jpg';
@@ -114,7 +115,8 @@ class MYPDF extends TCPDF {
         $this->SetAutoPageBreak($auto_page_break, $bMargin);
         // Imposta il punto di inizio del contenuto della pagina
         $this->setPageMark();
-
+		//Ripristina la trasparenza
+		$this->SetAlpha(1);
 		// Header locandina
 		// Logo SX
 		$this->Image(K_PATH_IMAGES.'logo_DEC.png', 5, 7, 0, 20, '', 'https://www.economia.unich.it', '', false, 300, 'L', false, false, 0, false, false, false);
@@ -213,16 +215,19 @@ $pdf->SetFont($font, 'B', 20);
 $pdf->Cell(0, 10, utf8_encode("''$titolo''"), 0, 1, 'C', false, '', 1, false, 'C', 'C');
 
 //Stampa il sottotitolo (se presente)
-if(isset($sottotitolo)){
+if(!empty($sottotitolo)){
 	$pdf->Ln(2);
 	$pdf->SetFont($font, '', 12);
 	$pdf->Cell(0, 5, utf8_encode("''$sottotitolo''"), 0, 0, 'C', false, '', 1, false, 'C', 'C');
-    }
+}
 
 //Stampa giorno e orario
+if(!empty($orarioFine)){
+	$orarioFineStampa = "- $orarioFine";
+}
 $pdf->Ln(10);
 $pdf->SetFont($font, '', 13);
-$pdf->Cell(0, 10, "$dataIta $bull  Ore $orarioInizio - $orarioFine", 0, 1, 'C', false, '', 0, false, 'C', 'C');
+$pdf->Cell(0, 10, "$dataIta $bull  Ore $orarioInizio $orarioFineStampa", 0, 1, 'C', false, '', 0, false, 'C', 'C');
 
 //Stampa il luogo e l'aula (se presente)
 if ($luogo == sede_pescara) {
@@ -259,9 +264,10 @@ if($cfu > 0){
 }
 
 // Stampa il contenuto di $descrizione utilizzando la funzione "writeHTMLCell()"
+$descrizioneGiust = '<span style="text-align:justify;">'.$descrizione.'</span>';
 $pdf->SetTextColor(0,0,0);
 $pdf->SetFont($font, '', 12);
-$pdf->writeHTMLCell(0, 0, '', '75', $descrizione, 0, 1, 0, true, '', true);
+$pdf->writeHTMLCell(0, 0, '', '75', $descrizioneGiust, 0, 1, 0, true, '', true);
 
 // ---------------------------------------------------------
 
@@ -271,6 +277,7 @@ $pdf->Output('locandina-'.$idSeminario.'.pdf', 'I');
 
 }
 }
+
 //============================================================+
 // FINE FILE
 //============================================================+
