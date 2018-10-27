@@ -26,7 +26,7 @@ if (!isset($_FILES['locandina_personale']) || !is_uploaded_file($_FILES['locandi
 } elseif ($_FILES['locandina_personale']['size'] > 5242880) {
 	$erroreLocandina = "Dimensione locandina eccessiva!<br \>";
 	$locandinaCheck = false;
-} elseif($tipoFile != "pdf" && $tipoFile != "doc" && $tipoFile != "docx" && $tipoFile != "odt" ) {
+} elseif ($tipoFile != "pdf" && $tipoFile != "doc" && $tipoFile != "docx" && $tipoFile != "odt" ) {
     $erroreLocandina = "Tipo file non consentito!<br \>";
 	$locandinaCheck = false;
 } else {
