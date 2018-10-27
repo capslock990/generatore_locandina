@@ -1,4 +1,5 @@
-function validaForm() {        
+function validaForm() { 
+
 	var nome = document.forms["formLocandina"]["nome"].value;
 	var cognome = document.forms["formLocandina"]["cognome"].value;
 	var seminario = document.forms["formLocandina"]["seminario"].value;
@@ -47,4 +48,5 @@ function validaForm() {
 	document.getElementById("descrizione").innerHTML = "Numero righe descrizione superato";  
 	return false;
 	};
+
 }
