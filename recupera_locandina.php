@@ -11,7 +11,7 @@ function recuperaLocandina($idSeminario){
  try {
     $db = new PDO("mysql:host=$servername;dbname=database_locandine", $username, $password);
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	$sql = "SELECT * FROM locandina WHERE id_seminario = :idseminario";
+	$sql = "SELECT nome_file FROM locandina WHERE id_seminario = :idseminario";
 	$stmt = $db->prepare($sql);
 	$stmt->bindValue(':idseminario', $idSeminario, PDO::PARAM_STR);
 	$stmt->execute();
